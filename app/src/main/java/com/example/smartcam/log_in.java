@@ -43,28 +43,20 @@ public class log_in extends AppCompatActivity {
                 finish();
             }
         });
-//        btn_signIn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String email, password;
-//                email = iedtEmail.getText().toString().trim();
-//                password = iedtPassword.getText().toString().trim();
-//                if (TextUtils.isEmpty(email)) {
-//                    Toast.makeText(log_in.this, "Please Enter Email", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if (TextUtils.isEmpty(password)) {
-//                    Toast.makeText(log_in.this, "Please enter password", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//            }
-//        });
-
-
+//
         btn_signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
+            }
+        });
+
+        tv_reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(log_in.this,resetpassword.class);
+                startActivity(intent);
+                finish();
             }
         });
 
