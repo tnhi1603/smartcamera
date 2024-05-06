@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "692217413026",
+    "project_id": "smartcamera-e705c",
+    "storage_bucket": "smartcamera-e705c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:692217413026:android:12a253eb1924da8be246fb",
+        "android_client_info": {
+          "package_name": "com.example.smartcam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVW0DX5SHn86QGMArOQl_9WIqeLAPyXyY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -66,8 +66,8 @@
 
     <Button
         android:id="@+id/button6"
-        android:layout_width="408dp"
-        android:layout_height="59dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
         android:text="Thông tin tài khoản"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,8 +76,8 @@
 
     <Button
         android:id="@+id/button7"
-        android:layout_width="408dp"
-        android:layout_height="59dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
         android:text="Thông tin camera"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,8 +87,8 @@
 
     <Button
         android:id="@+id/button8"
-        android:layout_width="408dp"
-        android:layout_height="59dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
         android:text="Cấu hình camera"
         app:layout_constraintEnd_toEndOf="parent"
@@ -98,8 +98,8 @@
 
     <Button
         android:id="@+id/button9"
-        android:layout_width="408dp"
-        android:layout_height="59dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Thông tin phiên bản"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButton3"
         app:layout_constraintEnd_toEndOf="parent"
