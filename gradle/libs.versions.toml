@@ -7,8 +7,18 @@ appcompat = "1.6.1"
 material = "1.11.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
+googleGmsGoogleServices = "4.4.1"
+firebaseAuth = "23.0.0"
+firebaseDatabase = "21.0.0"
+firebase-firestore = "24.5.0"
+firebase-storage = "20.2.0"
+firebase-common = "21.1.0"
 
 [libraries]
+firebase-common = { group = "com.google.firebase", name = "firebase-common", version.ref = "firebase-common" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebase-firestore" }
+firebase-storage = { module = "com.google.firebase:firebase-storage", version.ref = "firebase-storage" }
+
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -16,7 +26,9 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-
+googleGmsGoogleServices = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }

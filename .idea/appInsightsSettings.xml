@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.smartcam" />
+                  <option name="mobileSdkAppId" value="1:692217413026:android:12a253eb1924da8be246fb" />
+                  <option name="projectId" value="smartcamera-e705c" />
+                  <option name="projectNumber" value="692217413026" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
