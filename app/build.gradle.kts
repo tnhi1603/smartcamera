@@ -30,13 +30,16 @@ android {
 }
 
 dependencies {
-    implementation(libs.firebase.storage)
-    implementation (libs.firebase.firestore)
+    implementation(platform("com.google.firebase:firebase-bom:28.4.1"))
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-auth")
+    implementation ("com.arthenica:mobile-ffmpeg-full:4.4.LTS")
+    implementation ("com.google.firebase:firebase-database")
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.database)
     implementation(libs.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
