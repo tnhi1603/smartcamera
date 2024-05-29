@@ -65,7 +65,10 @@ public class notification extends AppCompatActivity {
             }
         });
     }
-
+    public void xemlai(View view) {
+        Intent intent = new Intent(notification.this, MainActivity.class);
+        startActivity(intent);
+    }
     public void setting(View view) {
         Intent intent = new Intent(notification.this, setting.class);
         startActivity(intent);

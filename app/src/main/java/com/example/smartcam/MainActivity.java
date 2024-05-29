@@ -7,7 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,45 +22,39 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import com.arthenica.mobileffmpeg.FFmpeg;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.arthenica.mobileffmpeg.FFmpeg;
+
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private static final String CHANNEL_ID = "smartcam_channel";
+    private static final String PREFS_NAME = "SmartCamPrefs";
+    private static final String VIDEO_COUNTER_KEY = "videoCounter";
+
     private VideoView videoView;
     private Button playPauseButton, forwardButton, rewindButton;
     private DatabaseReference pirRef;
     private Handler handler;
-    private Runnable notificationRunnable;
     private boolean pirStatusOn;
-    private String message="Đã phát hiện chuyển động";
+    private String message = "Đã phát hiện chuyển động";
+    private boolean isActivityVisible; // To track the activity state
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,14 +69,17 @@ public class MainActivity extends AppCompatActivity {
         forwardButton = findViewById(R.id.forwardButton);
         rewindButton = findViewById(R.id.rewindButton);
 
-
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-        StorageReference videoRef = storageRef.child("1405202415:23:41.h264");
+
+        int videoNumber = getNextVideoNumber();
+        String videoFilename = "1405202415:27:26.h264";
+        StorageReference videoRef = storageRef.child(videoFilename);
+
         try {
             // Tạo file tạm thời để lưu video tải về
             File localFile = File.createTempFile("video", ".h264");
-            File convertedFile = new File(getExternalFilesDir(null), "video1.mp4");
+            File convertedFile = new File(getExternalFilesDir(null), "video" + videoNumber + ".mp4");
 
             videoRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
@@ -111,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             Log.e(TAG, "Error creating temp file: " + e.getMessage());
         }
+
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
         createNotificationChannel();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         pirRef = database.getReference("PIR");
@@ -176,12 +175,33 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void setting(View view){
-        Intent intent = new Intent(MainActivity.this,setting.class);
+    private int getNextVideoNumber() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        int currentNumber = prefs.getInt(VIDEO_COUNTER_KEY, 0);
+        int nextNumber = currentNumber + 1;
+        prefs.edit().putInt(VIDEO_COUNTER_KEY, nextNumber).apply();
+        return nextNumber;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isActivityVisible = true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isActivityVisible = false;
+    }
+
+    public void setting(View view) {
+        Intent intent = new Intent(MainActivity.this, setting.class);
         startActivity(intent);
     }
-    public void noti(View view){
-        Intent intent = new Intent(MainActivity.this,notification.class);
+
+    public void noti(View view) {
+        Intent intent = new Intent(MainActivity.this, notification.class);
         startActivity(intent);
     }
 
@@ -198,24 +218,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendNotification() {
-        Intent intent = new Intent(this, notification.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        if (!isActivityVisible) { // Only send notification if the activity is not visible
+            Intent intent = new Intent(this, notification.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.smartcam)
-                .setContentTitle("SmartCam Notification")
-                .setContentText(message)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.smartcam)
+                    .setContentTitle("SmartCam Notification")
+                    .setContentText(message)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true);
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, builder.build());
-        saveNotification("Đã phát hiện chuyển động");
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(0, builder.build());
+            saveNotification("Đã phát hiện chuyển động");
+        } else {
+            Log.d(TAG, "Activity is visible, no need to show notification");
+        }
     }
+
     DatabaseReference notificationsRef = FirebaseDatabase.getInstance().getReference("noti");
     String notificationId = notificationsRef.push().getKey();
+
     public void saveNotification(String title) {
         String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
         String time = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
