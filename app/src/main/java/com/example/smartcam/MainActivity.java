@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     private VideoView videoView;
     private Button playPauseButton, forwardButton, rewindButton;
-    private DatabaseReference pirRef;
+    private DatabaseReference pirRef, pir;
     private Handler handler;
     private boolean pirStatusOn;
     private String message = "Đã phát hiện chuyển động";
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         StorageReference storageRef = storage.getReference();
 
         int videoNumber = getNextVideoNumber();
-        String videoFilename = "1405202415:27:26.h264";
+        String videoFilename = "31052024061525.h264";
         StorageReference videoRef = storageRef.child(videoFilename);
 
         try {
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
         createNotificationChannel();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        pirRef = database.getReference("PIR");
+        pirRef = database.getReference("PIR/status");
 
         handler = new Handler();
         pirStatusOn = false;

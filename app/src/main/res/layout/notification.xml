@@ -66,8 +66,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="410dp"
-        android:layout_height="447dp"
+        android:layout_width="412dp"
+        android:layout_height="486dp"
         android:layout_marginTop="20dp"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButton3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,6 +75,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintVertical_bias="0.416"
-        tools:listitem="@layout/noti_item"/>
+        tools:listitem="@layout/noti_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
